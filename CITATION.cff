@@ -4,7 +4,7 @@ title: "BORA: Bacterial Omics for Resource-limited Analysis"
 abstract: "A modular, offline-capable WGS pipeline for bacterial bloodstream infection genomics and AMR surveillance in resource-limited settings."
 authors:
   - family-names: Moyo
-    given-names: Sylvester
+    given-names: Sylvester Zibusiso
 version: 0.1.0
 date-released: 2025-01-01
 repository-code: "https://github.com/sylvestermoyo-z/bora"
