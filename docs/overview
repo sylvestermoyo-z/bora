@@ -1,0 +1,71 @@
+# BORA: Pipeline Overview
+
+## What BORA Does
+
+BORA processes raw Illumina paired-end FASTQ reads from bacterial bloodstream infection (BSI) isolates through seven sequential steps:
+
+```
+FASTQ reads
+    │
+    ├─ 1. Quality Control (FastQC + MultiQC)
+    │       → results/qc/
+    │
+    ├─ 2. Filtering (Trim Galore!)
+    │       → results/filtered/
+    │
+    ├─ 3. Assembly (Shovill/SPAdes + QUAST)
+    │       → results/assembly/
+    │
+    ├─ 4. MLST Typing (mlst)
+    │       → results/typing/
+    │
+    ├─ 5. AMR Detection (AMRFinderPlus — organism-aware)
+    │       → results/amr/
+    │
+    ├─ 6. Species Modules (Kleborate / ECTyper / SISTR)
+    │       → results/species/
+    │
+    └─ 7. Summary Report
+            → results/reports/bora_summary.tsv
+```
+
+## Design Principles
+
+**Offline-first.** After the one-time database download, BORA requires no internet connection. This is essential for settings with unreliable or metered connectivity.
+
+**Organism-aware AMR.** AMRFinderPlus is called with `--organism` when a species hint is provided, enabling detection of chromosomal mutations (e.g. fluoroquinolone resistance via *gyrA/parC* mutations in *E. coli*) that are missed without organism context.
+
+**Assembly quality gating.** QUAST runs after every assembly and produces N50, contig count, and total length metrics. Poor assemblies can be flagged before downstream typing produces unreliable results.
+
+**Graceful missing data handling.** The summary report uses `-` for missing values rather than silently dropping samples, so every sample in your input appears in the final output regardless of whether a step succeeded.
+
+## Species Modules
+
+| Species | Tool | What it adds |
+|---|---|---|
+| *Klebsiella pneumoniae* | Kleborate | ST, capsule type (wzi/KL), virulence loci (ybt, clb, iuc), AMR context |
+| *Escherichia coli* | ECTyper | O and H serotyping |
+| *Salmonella enterica* | SISTR | Serovar prediction |
+| *Staphylococcus aureus* | spaTyper | spa repeat typing (optional) |
+| *Acinetobacter baumannii* | — | AMRFinderPlus organism-aware only |
+
+## Public Health Outputs
+
+The summary TSV (`results/reports/bora_summary.tsv`) contains per-isolate:
+
+- Species hint
+- MLST scheme and sequence type (ST)
+- AMR gene count and drug classes represented
+- Assembly quality metrics (contigs, N50, total length)
+- Notes (novel ST, no AMR genes detected, etc.)
+
+This table is designed to be opened directly in Excel or imported into surveillance databases.
+
+## Resource Requirements
+
+| Component | Minimum | Recommended |
+|---|---|---|
+| CPU threads | 4 | 8 |
+| RAM | 8 GB | 16 GB |
+| Storage (per sample) | ~2 GB | ~3 GB |
+| OS | Ubuntu/WSL2 | Ubuntu 22.04 / WSL2 |
