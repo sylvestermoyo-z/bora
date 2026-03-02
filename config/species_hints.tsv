@@ -1,0 +1,21 @@
+sample	species_hint
+# BORA Species Hints File
+# Format: sample ID <TAB> species hint (one per line)
+# Lines starting with # are ignored.
+#
+# Valid species_hint values:
+#   Klebsiella        → triggers Kleborate + AMRFinderPlus Klebsiella context
+#   E_coli            → triggers ECTyper + AMRFinderPlus Escherichia context
+#   Acinetobacter     → triggers AMRFinderPlus Acinetobacter_baumannii context
+#   Staphylococcus_aureus → triggers spaTyper (if enabled) + AMRFinderPlus S. aureus context
+#   Salmonella        → triggers SISTR + AMRFinderPlus Salmonella context
+#
+# IMPORTANT: This file is passed to run_bora.sh with the -s flag:
+#   bash pipeline/run_bora.sh -i config/sampleids.txt -s config/species_hints.tsv -t 8
+#
+# Replace the examples below with your actual sample IDs:
+#
+# BSI_001	Klebsiella
+# BSI_002	E_coli
+# BSI_003	Acinetobacter
+# BSI_004	Staphylococcus_aureus

@@ -1,0 +1,9 @@
+# BORA Sample ID List
+# One sample ID per line. Lines starting with # are ignored.
+# FASTQ files must be named: SAMPLEID_R1.fastq.gz and SAMPLEID_R2.fastq.gz
+# Place FASTQ files in the DATA_DIR set in config/bora.cfg (default: data/)
+#
+# Example:
+# BSI_001
+# BSI_002
+# BSI_003
