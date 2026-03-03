@@ -136,6 +136,7 @@ run_step() {
 run_step "Quality Control"       bash "${BIN}/qc.sh"              "$SAMPLEIDS"
 run_step "Read Filtering"        bash "${BIN}/filtering.sh"        "$SAMPLEIDS"
 run_step "Assembly"              bash "${BIN}/assembly.sh"         "$SAMPLEIDS"
+run_step "Species Identification" bash "${BIN}/species_id.sh"      "$SAMPLEIDS"
 run_step "MLST Typing"           bash "${BIN}/typing_core.sh"      "$SAMPLEIDS"
 run_step "AMR Detection"         bash "${BIN}/amr_core.sh"         "$SAMPLEIDS"
 run_step "Species Modules"       bash "${BIN}/species_modules.sh"  "$SAMPLEIDS"
