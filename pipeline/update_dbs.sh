@@ -100,3 +100,42 @@ echo "    2. Place FASTQ files in data/ (or set DATA_DIR in config/bora.cfg)"
 echo "    3. Run: bash pipeline/run_bora.sh -i config/sampleids.txt -t 8"
 echo "============================================================"
 echo ""
+
+# --- MASH RefSeq sketch (required for species identification) ----------------
+echo ""
+echo "[DB] MASH RefSeq sketch database (required for species ID step)..."
+if command -v mash >/dev/null 2>&1; then
+  mkdir -p db/mash
+  MASH_SKETCH="db/mash/refseq.genomes.k21s1000.msh"
+
+  if [ -f "$MASH_SKETCH" ]; then
+    echo "       ✓ MASH RefSeq sketch already present at $MASH_SKETCH"
+    echo "       To force re-download: rm $MASH_SKETCH && bash pipeline/update_dbs.sh"
+  else
+    echo "       Downloading MASH RefSeq sketch (~700MB)..."
+    echo "       This is a one-time download — BORA uses it offline after this."
+    wget -c \
+      "https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh" \
+      -O "$MASH_SKETCH" \
+      2>&1 | grep -E "saved|error|%" | tail -n5 || {
+        echo ""
+        echo "       [WARN] Primary download failed. Trying alternative source..."
+        wget -c \
+          "https://mash.readthedocs.io/_downloads/refseq.genomes.k21s1000.msh" \
+          -O "$MASH_SKETCH" 2>/dev/null || true
+      }
+
+    if [ -f "$MASH_SKETCH" ]; then
+      echo "       ✓ MASH RefSeq sketch ready at $MASH_SKETCH"
+      echo "       Size: $(du -sh "$MASH_SKETCH" | cut -f1)"
+    else
+      echo ""
+      echo "       [WARN] Automatic download failed. Manual download instructions:"
+      echo "       1. Go to: https://gembox.cbcb.umd.edu/mash/refseq.genomes.k21s1000.msh"
+      echo "       2. Save the file to: db/mash/refseq.genomes.k21s1000.msh"
+      echo "       3. Re-run: bash pipeline/update_dbs.sh"
+    fi
+  fi
+else
+  echo "       [WARN] mash not found — activate bora environment: conda activate bora"
+fi
