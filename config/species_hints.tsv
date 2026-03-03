@@ -1,21 +1,46 @@
 sample	species_hint
 # BORA Species Hints File
-# Format: sample ID <TAB> species hint (one per line)
+# ============================================================================
+# FORMAT: sample_ID <TAB> species_hint  (one per line)
 # Lines starting with # are ignored.
 #
-# Valid species_hint values:
-#   Klebsiella        → triggers Kleborate + AMRFinderPlus Klebsiella context
-#   E_coli            → triggers ECTyper + AMRFinderPlus Escherichia context
-#   Acinetobacter     → triggers AMRFinderPlus Acinetobacter_baumannii context
-#   Staphylococcus_aureus → triggers spaTyper (if enabled) + AMRFinderPlus S. aureus context
-#   Salmonella        → triggers SISTR + AMRFinderPlus Salmonella context
+# IMPORTANT: This file is now OPTIONAL.
+# BORA automatically identifies species via MASH after assembly and generates
+# hints automatically. You only need this file if you want to:
+#   1. Override an auto-detected species call
+#   2. Run without the MASH database (manual hints only mode)
 #
-# IMPORTANT: This file is passed to run_bora.sh with the -s flag:
+# To use: pass this file with the -s flag:
 #   bash pipeline/run_bora.sh -i config/sampleids.txt -s config/species_hints.tsv -t 8
 #
-# Replace the examples below with your actual sample IDs:
+# Manual hints always take precedence over MASH auto-detection.
+#
+# ============================================================================
+# Valid species_hint values and what they trigger:
+# ============================================================================
+#
+#   Klebsiella              → AMRFinderPlus (Klebsiella) + Kleborate
+#   E_coli                  → AMRFinderPlus (Escherichia) + ECTyper
+#   Acinetobacter           → AMRFinderPlus (Acinetobacter_baumannii)
+#   Staphylococcus_aureus   → AMRFinderPlus (S. aureus) + spaTyper (if enabled)
+#   Pseudomonas_aeruginosa  → AMRFinderPlus (Pseudomonas_aeruginosa)
+#   Salmonella              → AMRFinderPlus (Salmonella) + SISTR
+#   Enterococcus_faecalis   → AMRFinderPlus (Enterococcus_faecalis)
+#   Enterococcus_faecium    → AMRFinderPlus (Enterococcus_faecium)
+#   Streptococcus_pneumoniae→ AMRFinderPlus (Streptococcus_pneumoniae)
+#   Campylobacter           → AMRFinderPlus (Campylobacter)
+#   Neisseria               → AMRFinderPlus (Neisseria)
+#   Citrobacter             → AMRFinderPlus (acquired genes only)
+#   Serratia                → AMRFinderPlus (acquired genes only)
+#   Enterobacter            → AMRFinderPlus (acquired genes only)
+#   [any other organism]    → AMRFinderPlus (acquired genes only)
+#
+# ============================================================================
+# Examples (remove # to activate):
+# ============================================================================
 #
 # BSI_001	Klebsiella
 # BSI_002	E_coli
 # BSI_003	Acinetobacter
 # BSI_004	Staphylococcus_aureus
+# BSI_005	Pseudomonas_aeruginosa
