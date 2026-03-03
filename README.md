@@ -1,6 +1,6 @@
 # BORA: Bacterial Omics for Resource-limited Analysis
 
-> *Bora* (Swahili): *better, best* — built to deliver better genomic surveillance where it is needed most.
+> Built to deliver Bloodstream Infection AMR genomic surveillance where it is needed most.
 
 BORA is a modular, offline-capable pipeline for whole-genome sequencing (WGS) analysis of bacterial bloodstream infection (BSI) isolates. It is designed specifically for **resource-limited settings** — running on a standard laptop (8 threads, 16 GB RAM) via Linux or Windows Subsystem for Linux (WSL), with no internet connection required after initial setup.
 
@@ -264,7 +264,7 @@ bora/
 If BORA supports your research or a publication, please cite:
 
 ```
-Moyo S (2025). BORA: Bacterial Omics for Resource-limited Analysis.
+Moyo S. Z. (2025). BORA: Bacterial Omics for Resource-limited Analysis.
 GitHub: https://github.com/sylvestermoyo-z/bora
 ```
 
@@ -280,6 +280,6 @@ BORA is released under the GNU General Public License v3.0. See [LICENSE](LICENS
 
 ## Author
 
-**Sylvester Moyo**
-PhD Candidate | Bloodstream Infection & AMR Genomics | Africa
+**Sylvester Zibusiso Moyo**
+PhD Student | Bloodstream Infection and AMR Genomics in Africa
 GitHub: [@sylvestermoyo-z](https://github.com/sylvestermoyo-z)
