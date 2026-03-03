@@ -70,31 +70,126 @@ resolve_fastq() {
 
 # --- AMRFinderPlus organism mapper -------------------------------------------
 # Maps common species names / hints to AMRFinderPlus --organism values.
-# Returns empty string if no match (organism flag omitted = still works).
+# Returns empty string if no match (organism flag omitted — acquired genes
+# are still detected, only chromosomal mutation calling is skipped).
+#
+# Supported AMRFinderPlus organisms (as of v3.12):
+#   Acinetobacter_baumannii, Burkholderia_cepacia, Burkholderia_pseudomallei,
+#   Campylobacter, Clostridioides_difficile, Enterococcus_faecalis,
+#   Enterococcus_faecium, Escherichia, Klebsiella, Neisseria,
+#   Pseudomonas_aeruginosa, Salmonella, Staphylococcus_aureus,
+#   Staphylococcus_pseudintermedius, Streptococcus_agalactiae,
+#   Streptococcus_pneumoniae, Streptococcus_pyogenes, Vibrio_cholerae
 map_amrfinder_organism() {
   local hint="${1,,}"  # lowercase
 
   case "$hint" in
-    klebsiella*|kpneumoniae|k_pneumoniae)
+    # ESKAPE pathogens
+    klebsiella*|k_pneumoniae|kpneumoniae)
       echo "Klebsiella" ;;
-    ecoli|e_coli|escherichia*)
+    escherichia*|e_coli|ecoli)
       echo "Escherichia" ;;
-    acinetobacter*|abaumannii|a_baumannii)
+    acinetobacter*|a_baumannii|abaumannii)
       echo "Acinetobacter_baumannii" ;;
-    staphylococcus*|saureus|s_aureus)
+    staphylococcus*aureus*|s_aureus|saureus)
       echo "Staphylococcus_aureus" ;;
-    pseudomonas*|paeruginosa|p_aeruginosa)
+    enterococcus*faecalis*|e_faecalis)
+      echo "Enterococcus_faecalis" ;;
+    enterococcus*faecium*|e_faecium)
+      echo "Enterococcus_faecium" ;;
+    # Pseudomonas — important BSI pathogen, chromosome-level resistance common
+    pseudomonas*|p_aeruginosa|paeruginosa)
       echo "Pseudomonas_aeruginosa" ;;
+    # Other Gram-negatives
     salmonella*)
       echo "Salmonella" ;;
-    citrobacter*)
-      echo "" ;;   # No organism-specific mutations in AMRFinderPlus for Citrobacter
+    campylobacter*)
+      echo "Campylobacter" ;;
+    neisseria*)
+      echo "Neisseria" ;;
+    vibrio*cholerae*|v_cholerae)
+      echo "Vibrio_cholerae" ;;
+    burkholderia*cepacia*|b_cepacia)
+      echo "Burkholderia_cepacia" ;;
+    burkholderia*pseudomallei*|b_pseudomallei)
+      echo "Burkholderia_pseudomallei" ;;
+    # Gram-positives
+    staphylococcus*pseudintermedius*)
+      echo "Staphylococcus_pseudintermedius" ;;
+    streptococcus*pneumoniae*|s_pneumoniae)
+      echo "Streptococcus_pneumoniae" ;;
+    streptococcus*pyogenes*|s_pyogenes)
+      echo "Streptococcus_pyogenes" ;;
+    streptococcus*agalactiae*|s_agalactiae)
+      echo "Streptococcus_agalactiae" ;;
+    clostridioides*difficile*|clostridium*difficile*|c_difficile)
+      echo "Clostridioides_difficile" ;;
+    # Organisms with no AMRFinderPlus mutation support
+    # (acquired gene detection still works — organism flag just omitted)
     raoultella*)
-      echo "Klebsiella" ;;  # Raoultella is phylogenetically close; best approximation
-    serratia*)
+      echo "Klebsiella" ;;  # phylogenetically within Klebsiella; best available
+    citrobacter*|serratia*|enterobacter*|proteus*|morganella*|providencia*)
       echo "" ;;
     *)
       echo "" ;;
+  esac
+}
+
+# --- MASH organism-to-BORA-hint mapper ---------------------------------------
+# Converts a raw MASH top-hit organism string (from RefSeq labels) to a
+# clean BORA species_hint that both amr_core.sh and species_modules.sh
+# can understand. This is the bridge between species_id.sh and downstream.
+map_organism_to_hint() {
+  local raw="${1,,}"  # lowercase
+
+  case "$raw" in
+    *klebsiella*pneumoniae*|*klebsiella*variicola*|*klebsiella*quasipneumoniae*)
+      echo "Klebsiella" ;;
+    *raoultella*)
+      echo "Klebsiella" ;;  # Raoultella → Klebsiella module (phylogenetic proximity)
+    *escherichia*coli*|*shigella*)
+      echo "E_coli" ;;       # Shigella is phylogenetically E. coli; ECTyper handles it
+    *acinetobacter*baumannii*)
+      echo "Acinetobacter" ;;
+    *staphylococcus*aureus*)
+      echo "Staphylococcus_aureus" ;;
+    *pseudomonas*aeruginosa*)
+      echo "Pseudomonas_aeruginosa" ;;
+    *salmonella*)
+      echo "Salmonella" ;;
+    *enterococcus*faecalis*)
+      echo "Enterococcus_faecalis" ;;
+    *enterococcus*faecium*)
+      echo "Enterococcus_faecium" ;;
+    *streptococcus*pneumoniae*)
+      echo "Streptococcus_pneumoniae" ;;
+    *streptococcus*pyogenes*)
+      echo "Streptococcus_pyogenes" ;;
+    *streptococcus*agalactiae*)
+      echo "Streptococcus_agalactiae" ;;
+    *campylobacter*)
+      echo "Campylobacter" ;;
+    *neisseria*)
+      echo "Neisseria" ;;
+    *citrobacter*)
+      echo "Citrobacter" ;;
+    *serratia*)
+      echo "Serratia" ;;
+    *enterobacter*)
+      echo "Enterobacter" ;;
+    *proteus*)
+      echo "Proteus" ;;
+    *burkholderia*cepacia*)
+      echo "Burkholderia_cepacia" ;;
+    *burkholderia*pseudomallei*)
+      echo "Burkholderia_pseudomallei" ;;
+    *clostridioides*|*clostridium*difficile*)
+      echo "Clostridioides_difficile" ;;
+    *vibrio*cholerae*)
+      echo "Vibrio_cholerae" ;;
+    *)
+      # Unknown or not yet mapped — return raw name truncated to first 2 words
+      echo "$raw" | awk '{print $1"_"$2}' | tr -d '()[]' ;;
   esac
 }
 
