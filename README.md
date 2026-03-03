@@ -12,7 +12,7 @@ BORA takes raw Illumina paired-end FASTQ reads and produces actionable outputs: 
 
 - **Offline-first:** all databases are stored locally after one-time download
 - **Resource-aware:** optimised defaults for modest hardware (8 threads, 16 GB RAM)
-- **BSI-focused:** built around ESKAPE pathogens (*K. pneumoniae*, *E. coli*, *A. baumannii*, *S. aureus*)
+- **BSI-focused:** built around ESKAPEEc pathogens (*Enterococcus faecium*, *Staphylococcus aureus*, *Klebsiella pneumoniae*, *Acinetobacter baumannii*, *Pseudomonas aeruginosa*, *Enterobacter spp*, and *Escherichia coli*)
 - **WSL-compatible:** fully validated on Windows Subsystem for Linux 2
 - **Public health outputs:** results framed for surveillance reports and policy briefs
 - **Modular:** enable or disable species-specific add-ons as needed
