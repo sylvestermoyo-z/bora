@@ -83,6 +83,8 @@ map_amrfinder_organism() {
       echo "Acinetobacter_baumannii" ;;
     staphylococcus*|saureus|s_aureus)
       echo "Staphylococcus_aureus" ;;
+    pseudomonas*|paeruginosa|p_aeruginosa)
+      echo "Pseudomonas_aeruginosa" ;;
     salmonella*)
       echo "Salmonella" ;;
     citrobacter*)
