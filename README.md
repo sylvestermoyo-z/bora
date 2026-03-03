@@ -281,5 +281,5 @@ BORA is released under the GNU General Public License v3.0. See [LICENSE](LICENS
 ## Author
 
 **Sylvester Zibusiso Moyo**
-PhD Student | Bloodstream Infection and AMR Genomics in Africa
+PhD Student | Bloodstream Infection and AMR in the Human Population in Africa
 GitHub: [@sylvestermoyo-z](https://github.com/sylvestermoyo-z)
