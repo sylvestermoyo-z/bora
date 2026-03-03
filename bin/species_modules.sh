@@ -85,6 +85,10 @@ while IFS= read -r sample; do
       log "  spaTyper disabled or not installed — skipping S. aureus module"
     fi
 
+  # Pseudomonas aeruginosa
+  # No standalone typer — MLST + AMRFinderPlus organism-aware is sufficient
+    PSEUDOMONAS_ENABLED=true
+  
   # --- No module for this species --------------------------------------------
   else
     log "  No species module configured for hint: '${species_hint:-unknown}' — skipping"
